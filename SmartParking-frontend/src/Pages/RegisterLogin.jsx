@@ -92,9 +92,29 @@ export default function RegisterLogin() {
 
   return (
     <>
+    <div className="logo">
+    <img src="/logo.png" alt="logo" />
+    </div>
       <style>{`
         * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
-        body { background: #f6f5f7; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        body { 
+            background: url('background.png') no-repeat center center/cover; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 200; /* make sure it's above the background */
+        }
+
+        .logo img {
+            height: 160px; /* adjust as needed */
+            width: auto;
+        }
         .container { background: #fff; border-radius: 20px; box-shadow: 0 14px 28px rgba(0,0,0,0.25),0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 900px; max-width: 100%; min-height: 520px; }
         .form-container { position: absolute; top: 0; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease; }
         .sign-in-container { left: 0; width: 50%; z-index: 2; }
@@ -103,15 +123,15 @@ export default function RegisterLogin() {
         .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
         @keyframes show { 0%, 49.99% { opacity: 0; z-index:1; } 50%,100% { opacity:1; z-index:5; } }
         form { background: #ffffff; display: flex; flex-direction: column; padding: 0 50px; height: 100%; justify-content: center; align-items: center; text-align: center; }
-        .form-title { color: #5fa89d; margin-bottom: 10px; }
+        .form-title { color: #90cde9; margin-bottom: 10px; }
         .subtitle { font-size: 12px; color: #999; margin-bottom: 10px; }
         input { background: #f2f6f5; border: none; padding: 12px 15px; margin: 8px 0; width: 100%; border-radius: 8px; color: black; }
-        button { border-radius: 20px; border: 1px solid #5fa89d; background: #5fa89d; color: #fff; font-size: 12px; font-weight: bold; padding: 12px 45px; letter-spacing: 1px; text-transform: uppercase; transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px; }
+        button { border-radius: 20px; border: 1px solid #90cde9; background: #90cde9; color: #fff; font-size: 12px; font-weight: bold; padding: 12px 45px; letter-spacing: 1px; text-transform: uppercase; transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px; }
         button.ghost { background: transparent; border-color: #fff; }
         button:active { transform: scale(0.95); }
         .overlay-container { position: absolute; top: 0; left: 50%; width: 50%; height: 100%; overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100; }
         .container.right-panel-active .overlay-container { transform: translateX(-100%); }
-        .overlay { background: linear-gradient(to right, #cbeae5, #5fa89d); color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%; transform: translateX(0); transition: transform 0.6s ease-in-out; }
+        .overlay { background: linear-gradient(to right, #acd2e4, #90cde9); color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%; transform: translateX(0); transition: transform 0.6s ease-in-out; }
         .container.right-panel-active .overlay { transform: translateX(50%); }
         .overlay-panel { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%; transition: transform 0.6s ease-in-out; }
         .overlay-left { transform: translateX(-20%); }
@@ -136,7 +156,7 @@ export default function RegisterLogin() {
             -webkit-appearance: none;
             width: 14px;       /* small but visible */
             height: 14px;      /* small but visible */
-            border: 1.5px solid #5fa89d;
+            border: 1.5px solid #90cde9;
             border-radius: 3px; /* slightly rounded */
             position: relative;
             cursor: pointer;
@@ -146,8 +166,8 @@ export default function RegisterLogin() {
             transition: all 0.2s ease-in-out;
           }
         .remember-me-custom input[type="checkbox"]:checked {
-          background-color: #5fa89d;
-          border-color: #5fa89d;
+          background-color: #90cde9;
+          border-color: #90cde9;
         }
         .remember-me-custom input[type="checkbox"]:checked::after {
           content: '';
@@ -167,7 +187,7 @@ export default function RegisterLogin() {
         .modal-content { background:#5fa89d; padding:30px; border-radius:10px; width:300px; text-align:center; position:relative; }
         .modal-content h2 { margin-bottom:15px; }
         .modal-content input { margin-bottom:10px; width:100%; }
-        .modal-content button { width:100%; color: #ffffff; background: #09221e; border: none; }
+        .modal-content button { width:100%; color: #ffffff; background: #fff; border: none; }
         .close-btn { position:absolute; top:10px; right:15px; cursor:pointer; font-weight:bold; font-size:16px; }
       `}</style>
 
