@@ -69,8 +69,17 @@ export default function RegisterLogin() {
         else localStorage.removeItem("signup");
       } else {
         alert("Sign In Successful!");
-        if (signInData.remember) localStorage.setItem("signin", JSON.stringify(signInData));
-        else localStorage.removeItem("signin");
+
+        // 🔥 ADD THESE TWO LINES
+        localStorage.setItem("username", signInData.email.split("@")[0]);
+        // OR if you later get name from backend, replace above line with:
+        // localStorage.setItem("username", response.name);
+
+        if (signInData.remember) {
+          localStorage.setItem("signin", JSON.stringify(signInData));
+        } else {
+          localStorage.removeItem("signin");
+        }
       }
     }
   };
