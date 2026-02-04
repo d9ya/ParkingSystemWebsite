@@ -13,7 +13,6 @@ export default function RegisterLogin() {
     name: "",
     email: "",
     password: "",
-    remember: false,
   });
 
   const [signInData, setSignInData] = useState({
@@ -65,16 +64,10 @@ export default function RegisterLogin() {
     if (validate(type)) {
       if (type === "signup") {
         alert("Sign Up Successful!");
-        if (signUpData.remember) localStorage.setItem("signup", JSON.stringify(signUpData));
-        else localStorage.removeItem("signup");
+        // Optional: save signup info if needed
       } else {
         alert("Sign In Successful!");
-
-        // 🔥 ADD THESE TWO LINES
         localStorage.setItem("username", signInData.email.split("@")[0]);
-        // OR if you later get name from backend, replace above line with:
-        // localStorage.setItem("username", response.name);
-
         if (signInData.remember) {
           localStorage.setItem("signin", JSON.stringify(signInData));
         } else {
@@ -101,37 +94,60 @@ export default function RegisterLogin() {
 
   return (
     <>
-    <div className="logo">
-    <img src="/logo.png" alt="logo" />
-    </div>
+      <div className="logo">
+        <img src="/logo.png" alt="logo" />
+      </div>
+
       <style>{`
         * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
         body { 
-            background: url('background.png') no-repeat center center/cover; 
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            }
+          background: url('background.png') no-repeat center center/cover; 
+          min-height: 100vh; 
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+        }
         .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 200; /* make sure it's above the background */
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          z-index: 200;
         }
-
         .logo img {
-            height: 160px; /* adjust as needed */
-            width: auto;
+          height: 160px;
+          width: auto;
         }
-        .container { background: #fff; border-radius: 20px; box-shadow: 0 14px 28px rgba(0,0,0,0.25),0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 900px; max-width: 100%; min-height: 520px; }
-        .form-container { position: absolute; top: 0; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease; }
+        .container { 
+          background: #fff; 
+          border-radius: 20px; 
+          box-shadow: 0 14px 28px rgba(0,0,0,0.25),0 10px 10px rgba(0,0,0,0.22); 
+          position: relative; 
+          overflow: hidden; 
+          width: 900px; 
+          max-width: 100%; 
+          min-height: 520px; 
+        }
+        .form-container { 
+          position: absolute; 
+          top: 0; 
+          height: 100%; 
+          transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease; 
+        }
         .sign-in-container { left: 0; width: 50%; z-index: 2; }
         .container.right-panel-active .sign-in-container { transform: translateX(100%); }
         .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
         .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
         @keyframes show { 0%, 49.99% { opacity: 0; z-index:1; } 50%,100% { opacity:1; z-index:5; } }
-        form { background: #ffffff; display: flex; flex-direction: column; padding: 0 50px; height: 100%; justify-content: center; align-items: center; text-align: center; }
+        form { 
+          background: #ffffff; 
+          display: flex; 
+          flex-direction: column; 
+          padding: 0 50px; 
+          height: 100%; 
+          justify-content: center; 
+          align-items: center; 
+          text-align: center; 
+        }
         .form-title { color: #90cde9; margin-bottom: 10px; }
         .subtitle { font-size: 12px; color: #999; margin-bottom: 10px; }
         input { background: #f2f6f5; border: none; padding: 12px 15px; margin: 8px 0; width: 100%; border-radius: 8px; color: black; }
@@ -161,19 +177,19 @@ export default function RegisterLogin() {
           user-select: none;
         }
         .remember-me-custom input[type="checkbox"] {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 14px;       /* small but visible */
-            height: 14px;      /* small but visible */
-            border: 1.5px solid #90cde9;
-            border-radius: 3px; /* slightly rounded */
-            position: relative;
-            cursor: pointer;
-            outline: none;
-            vertical-align: middle;
-            margin-right: 6px;
-            transition: all 0.2s ease-in-out;
-          }
+          appearance: none;
+          -webkit-appearance: none;
+          width: 14px;
+          height: 14px;
+          border: 1.5px solid #90cde9;
+          border-radius: 3px;
+          position: relative;
+          cursor: pointer;
+          outline: none;
+          vertical-align: middle;
+          margin-right: 6px;
+          transition: all 0.2s ease-in-out;
+        }
         .remember-me-custom input[type="checkbox"]:checked {
           background-color: #90cde9;
           border-color: #90cde9;
@@ -181,7 +197,7 @@ export default function RegisterLogin() {
         .remember-me-custom input[type="checkbox"]:checked::after {
           content: '';
           position: absolute;
-          left: 3px;   /* adjust to center the checkmark */
+          left: 3px;
           top: 1px;
           width: 4px;
           height: 7px;
@@ -193,11 +209,11 @@ export default function RegisterLogin() {
         .remember-forgot a { font-size: 12px; color: #09221e; text-decoration: none; cursor: pointer; }
         /* Modal */
         .modal { position: fixed; top: 0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; z-index:9999; }
-        .modal-content { background:#5fa89d; padding:30px; border-radius:10px; width:300px; text-align:center; position:relative; }
-        .modal-content h2 { margin-bottom:15px; }
-        .modal-content input { margin-bottom:10px; width:100%; }
-        .modal-content button { width:100%; color: #ffffff; background: #fff; border: none; }
-        .close-btn { position:absolute; top:10px; right:15px; cursor:pointer; font-weight:bold; font-size:16px; }
+        .modal-content { background:#90cde9; padding:30px; border-radius:10px; width:300px; text-align:center; position:relative; }
+        .modal-content h2 { margin-bottom:15px; color:#fff; }
+        .modal-content input { margin-bottom:10px; width:100%; padding:8px; border-radius:5px; border:none; }
+        .modal-content button { width:100%; color: #fff; background: #000000; border: none; cursor:pointer; padding:10px; border-radius:5px; }
+        .close-btn { position:absolute; top:10px; right:15px; cursor:pointer; font-weight:bold; font-size:16px; color:#fff; }
       `}</style>
 
       <div className={`container ${isActive ? "right-panel-active" : ""}`}>
@@ -215,18 +231,10 @@ export default function RegisterLogin() {
             {signUpErrors.email && <p className="error-message">{signUpErrors.email}</p>}
 
             <div className="password-wrapper">
-              <input type={showPasswordSignUp ?  "text" : "password"} placeholder="Password" name="password" value={signUpData.password} onChange={(e) => handleChange(e, "signup")} />
+              <input type={showPasswordSignUp ? "text" : "password"} placeholder="Password" name="password" value={signUpData.password} onChange={(e) => handleChange(e, "signup")} />
               <span onClick={() => setShowPasswordSignUp(!showPasswordSignUp)}>{showPasswordSignUp ? <FaEyeSlash /> : <FaEye />}</span>
             </div>
             {signUpErrors.password && <p className="error-message">{signUpErrors.password}</p>}
-
-            <div className="remember-forgot">
-              <label className="remember-me-custom">
-                <input type="checkbox" name="remember" checked={signUpData.remember} onChange={(e) => handleChange(e, "signup")} />
-                Remember Me
-              </label>
-              <a onClick={() => setShowForgotModal(true)}>Forgot Password?</a>
-            </div>
 
             <button type="submit">Sign Up</button>
           </form>
@@ -247,11 +255,12 @@ export default function RegisterLogin() {
             </div>
             {signInErrors.password && <p className="error-message">{signInErrors.password}</p>}
 
-            <div style={{ width: "100%", marginTop: "10px" }}>
+            <div className="remember-forgot">
               <label className="remember-me-custom">
                 <input type="checkbox" name="remember" checked={signInData.remember} onChange={(e) => handleChange(e, "signin")} />
                 Remember Me
               </label>
+              <a onClick={() => setShowForgotModal(true)}>Forgot Password?</a>
             </div>
 
             <button type="submit">Sign In</button>
