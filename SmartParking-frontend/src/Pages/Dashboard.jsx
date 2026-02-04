@@ -310,7 +310,7 @@ const handlelogout = () => {
 
           <nav className="menu">
             <a className={active === "Dashboard" ? "active" : ""} onClick={() => setActive("Dashboard")}>Dashboard</a>
-            <a className={active === "Bookings" ? "active" : ""} onClick={() => setActive("Bookings")}>Bookings</a>
+            <a onClick={() => navigate("/booking")}>Bookings</a>
             <a className={active === "Payments" ? "active" : ""} onClick={() => setActive("Payments")}>Payments</a>
             <a className={active === "History" ? "active" : ""} onClick={() => setActive("History")}>History</a>
             <a className={active === "Settings" ? "active" : ""} onClick={() => setActive("Settings")}>Settings</a>
