@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-// ❌ remove this import IF the CSS file does not exist
-// import "./BookingPage.css";
+import { useNavigate } from "react-router-dom";
 
 const BookingPage = () => {
   const [selectedSpot, setSelectedSpot] = useState(null);
@@ -59,6 +58,14 @@ const BookingPage = () => {
     });
     setBookingSaved(true);
     alert("Booking Confirmed ✅");
+    navigate("/payment",{
+        state: {
+          parkingSpot: selectedSpot,
+          ...formData,
+          province,
+          district,
+        }
+    });
   };
     const resetAllData = () => {
     setSelectedSpot(null);
@@ -76,6 +83,8 @@ const BookingPage = () => {
     setSubmitted(false);
     setBookingSaved(false);
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -221,7 +230,7 @@ const BookingPage = () => {
         body { background: #f9fbff; font-family: Helvetica, Arial, sans-serif; overflow-x: hidden; }
 
         .brand-header {
-          background-color: #98b5de;
+          background-color:#0e5aa5;
           padding: 25px 0;
           text-align: center;
           color: white;
@@ -314,12 +323,15 @@ const BookingPage = () => {
         .confirm-btn {
           width: 100%;
           padding: 16px;
-          background: #88a0ef;
+          background: #072387;
           color: white;
           border-radius: 12px;
           font-weight: 700;
           border: none;
           cursor: pointer;
+        }
+          .confirm-btn:hover {
+          background: #4f6ef7;
         }
                 /* Make input & select boxes WHITE */
       input,

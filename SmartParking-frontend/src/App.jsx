@@ -2,6 +2,7 @@ import{BrowserRouter as Router, Routes,Route} from"react-router-dom";
 import RegisterLogin from "./Pages/RegisterLogin";
 import Dashboard from"./Pages/Dashboard.jsx";
 import BookingPage from"./Pages/BookingPage.jsx";
+import PaymentPage from"./Pages/Payments.jsx";
 
 function App() {
   
@@ -13,6 +14,7 @@ function App() {
         <Route path="/registerlogin" element={<RegisterLogin />} />
         <Route path="/userdashboard" element={<Dashboard />} />
         <Route path ="/booking" element={<BookingPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
         
       </Routes>
       </Router>
