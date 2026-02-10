@@ -16,9 +16,17 @@ const PaymentPage = () => {
       return;
     }
 
+    // Save booking + payment method to localStorage
+    const savedBookings = JSON.parse(localStorage.getItem("bookingHistory")) || [];
+    savedBookings.push({
+      ...booking,           // this is the data passed from BookingPage
+      paymentMethod,        // add payment info
+    });
+    localStorage.setItem("bookingHistory", JSON.stringify(savedBookings));
+
     setTimeout(() => {
       alert("Payment Successful 💳✅");
-      navigate("/userdashboard");
+      navigate("/userdashboard"); // redirect to dashboard
     }, 800);
   };
 
