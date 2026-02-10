@@ -3,6 +3,7 @@ import RegisterLogin from "./Pages/RegisterLogin";
 import Dashboard from"./Pages/Dashboard.jsx";
 import BookingPage from"./Pages/BookingPage.jsx";
 import PaymentPage from"./Pages/Payments.jsx";
+import HistoryPage from "./Pages/History.jsx";
 
 function App() {
   
@@ -15,6 +16,7 @@ function App() {
         <Route path="/userdashboard" element={<Dashboard />} />
         <Route path ="/booking" element={<BookingPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/history" element={<HistoryPage />} />
         
       </Routes>
       </Router>
