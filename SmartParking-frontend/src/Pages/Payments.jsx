@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 const PaymentPage = () => {
   const location = useLocation();
-  const booking = location.state?.booking;
+  const booking = location.state;
   const [paymentMethod, setPaymentMethod] = useState("");
   
   console.log(booking);
