@@ -313,7 +313,7 @@ const handlelogout = () => {
             <a onClick={() => navigate("/booking")}>Bookings</a>
             <a onClick={() => navigate("/payment")}>Payments</a>
             <a onClick={() => navigate("/history")}>History</a>
-            <a className={active === "Settings" ? "active" : ""} onClick={() => setActive("Settings")}>Settings</a>
+            <a onClick={() => navigate("/settings")}>Settings</a>
             <a
               className="logout"
               onClick={() => {
