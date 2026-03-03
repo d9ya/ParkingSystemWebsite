@@ -5,6 +5,7 @@ import BookingPage from"./Pages/BookingPage.jsx";
 import PaymentPage from"./Pages/Payments.jsx";
 import HistoryPage from "./Pages/History.jsx";
 import Settings from "./Pages/Settings.jsx";
+import AdminDashboard from "./Pages/Admindashboard.jsx";
 
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         
       </Routes>
       </Router>
