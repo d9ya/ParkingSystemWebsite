@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterLogin() {
   const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
   const [showPasswordSignUp, setShowPasswordSignUp] = useState(false);
   const [showPasswordSignIn, setShowPasswordSignIn] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -72,6 +74,11 @@ export default function RegisterLogin() {
           localStorage.setItem("signin", JSON.stringify(signInData));
         } else {
           localStorage.removeItem("signin");
+        }
+        if (signInData.email === "admin@gmail.com") {
+          navigate("/admin");
+        } else {
+          navigate("/userdashboard");
         }
       }
     }
