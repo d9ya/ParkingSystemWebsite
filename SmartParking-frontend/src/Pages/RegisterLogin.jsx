@@ -61,28 +61,46 @@ export default function RegisterLogin() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e, type) => {
-    e.preventDefault();
-    if (validate(type)) {
-      if (type === "signup") {
-        alert("Sign Up Successful!");
-        // Optional: save signup info if needed
+  const handleSubmit = async (e, type) => {
+  e.preventDefault();
+  if (!validate(type)) return;
+
+  try {
+    if (type === "signup") {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signUpData),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+      alert("Sign Up Successful!");
+      console.log("Signup response:", data);
+      setSignUpData({ name: "", email: "", password: "" });
+    } else if (type === "signin") {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signInData),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Login failed");
+      alert("Sign In Successful!");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.user.email.split("@")[0]);
+      if (signInData.remember) {
+        localStorage.setItem("signin", JSON.stringify(signInData));
       } else {
-        alert("Sign In Successful!");
-        localStorage.setItem("username", signInData.email.split("@")[0]);
-        if (signInData.remember) {
-          localStorage.setItem("signin", JSON.stringify(signInData));
-        } else {
-          localStorage.removeItem("signin");
-        }
-        if (signInData.email === "admin@gmail.com") {
-          navigate("/admin");
-        } else {
-          navigate("/userdashboard");
-        }
+        localStorage.removeItem("signin");
       }
+      navigate(data.user.email === "admin@gmail.com" ? "/admin" : "/userdashboard");
+      console.log("Login response:", data);
     }
-  };
+  } catch (err) {
+    alert(err.message);
+    console.error(err);
+  }
+};
 
   const handleForgotSubmit = (e) => {
     e.preventDefault();

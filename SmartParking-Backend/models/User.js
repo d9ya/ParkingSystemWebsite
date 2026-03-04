@@ -27,7 +27,7 @@ const User = sequelize.define(
     },
   },
   {
-    tableName: "users",
+    tableName: "users", // ensures lowercase table in PostgreSQL
     timestamps: true,
   }
 );

@@ -35,7 +35,9 @@ const BookingPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
 
@@ -46,28 +48,43 @@ const BookingPage = () => {
       !province ||
       !district ||
       !selectedSpot
-    ) {
+    )
       return;
-    }
 
-    console.log("Booking Confirmed:", {
-      parkingSpot: selectedSpot,
-      ...formData,
-      province,
-      district,
-    });
-    setBookingSaved(true);
-    alert("Booking Confirmed ✅");
-    navigate("/payment",{
+    try {
+     const res = await fetch("http://localhost:5000/api/bookings/create", { 
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    ...formData,
+    province,
+    district,
+    parkingSpot: selectedSpot.name,
+  }),
+});
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Booking failed");
+
+      alert("Booking Confirmed ✅");
+      setBookingSaved(true);
+      console.log("Booking saved:", data.booking);
+
+      navigate("/payment", {
         state: {
-          parkingSpot: selectedSpot,
           ...formData,
           province,
           district,
-        }
-    });
+          parkingSpot: selectedSpot.name,
+        },
+      });
+    } catch (err) {
+      alert(err.message);
+      console.error(err);
+    }
   };
-    const resetAllData = () => {
+
+  const resetAllData = () => {
     setSelectedSpot(null);
 
     setFormData({
@@ -84,15 +101,11 @@ const BookingPage = () => {
     setBookingSaved(false);
   };
 
-  const navigate = useNavigate();
-
   return (
     <>
       <div className="booking-container">
         <header className="brand-header">
-          <div className="logo-text">
-            BOOKING
-          </div>
+          <div className="logo-text">BOOKING</div>
         </header>
 
         <div className="parking-grid">
@@ -104,9 +117,8 @@ const BookingPage = () => {
               } ${selectedSpot?.id === spot.id ? "active" : ""}`}
               onClick={() => {
                 if (spot.available === 0) return;
-
                 setSelectedSpot(spot);
-                resetForm(); // 🔥 wipes everything clean
+                
               }}
             >
               <h3>{spot.name}</h3>
@@ -127,10 +139,11 @@ const BookingPage = () => {
                         <span className="error-msg">Invalid user name</span>
                       )}
                     </label>
-                    <input name="username"
-                     onChange={handleChange} 
-                     value={formData.username}
-                     />
+                    <input
+                      name="username"
+                      onChange={handleChange}
+                      value={formData.username}
+                    />
                   </div>
 
                   <div className="field-group">
@@ -140,14 +153,22 @@ const BookingPage = () => {
                         <span className="error-msg">Invalid NIC number</span>
                       )}
                     </label>
-                    <input name="nic" onChange={handleChange} value={formData.nic} />
+                    <input
+                      name="nic"
+                      onChange={handleChange}
+                      value={formData.nic}
+                    />
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="field-group">
                     <label>Vehicle Type</label>
-                    <select name="vehicleType" value={formData.vehicleType} onChange={handleChange}>
+                    <select
+                      name="vehicleType"
+                      value={formData.vehicleType}
+                      onChange={handleChange}
+                    >
                       <option>Car</option>
                       <option>Bike</option>
                     </select>
@@ -155,7 +176,11 @@ const BookingPage = () => {
 
                   <div className="field-group">
                     <label>Vehicle Model</label>
-                    <select name="vehicleModel" value={formData.vehicleModel} onChange={handleChange}>
+                    <select
+                      name="vehicleModel"
+                      value={formData.vehicleModel}
+                      onChange={handleChange}
+                    >
                       <option>Model A</option>
                       <option>Model B</option>
                     </select>
@@ -166,9 +191,7 @@ const BookingPage = () => {
                   <label>
                     Vehicle Number
                     {submitted && !formData.vehicleNumber && (
-                      <span className="error-msg">
-                        Invalid vehicle number
-                      </span>
+                      <span className="error-msg">Invalid vehicle number</span>
                     )}
                   </label>
                   <input
@@ -214,7 +237,14 @@ const BookingPage = () => {
                 <button className="confirm-btn">Confirm</button>
 
                 {bookingSaved && (
-                  <p style={{ marginTop: "20px", color: "green", fontWeight: "700", textAlign: "center" }}>
+                  <p
+                    style={{
+                      marginTop: "20px",
+                      color: "green",
+                      fontWeight: "700",
+                      textAlign: "center",
+                    }}
+                  >
                     ✅ Booking saved successfully
                   </p>
                 )}
@@ -224,130 +254,26 @@ const BookingPage = () => {
         )}
       </div>
 
-      {/* ✅ CSS stays EXACTLY the same, just placed correctly */}
+      {/* CSS remains unchanged */}
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #f9fbff; font-family: Helvetica, Arial, sans-serif; overflow-x: hidden; }
-
-        .brand-header {
-          background-color:#0e5aa5;
-          padding: 25px 0;
-          text-align: center;
-          color: white;
-          font-size: 24px;
-          font-weight: 800;
-          width: 190%;
-        }
-
-        .content-area {
-          padding: 40px 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 40px;
-        }
-
-        .parking-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 40px;
-          max-width: 1000px;
-          width: 190%;
-          margin: auto;
-          marging-left: auto;
-          margin-right: auto;
-        }
-
-        .parking-card {
-          background: #6d81a9;
-          padding: 20px;
-          border-radius: 14px;
-          border: 1px solid #7197e4;
-          cursor: pointer;
-          transition: 0.2s;
-          width: 100%;
-        }
-          input[name="username"],
-          input[name="vehicleNumber"],
-          select[name="vehicleType"],
-          select[name="vehicleModel"],
-          select {
-            color: #000;
-          }
-
-          /* Make sure labels are also black */
-          label {
-            color: #000;
-          }
-
-          /* Dropdown options text */
-          option {
-            color: #000;
-          }
-
+        .brand-header { background-color:#0e5aa5; padding: 25px 0; text-align: center; color: white; font-size: 24px; font-weight: 800; width: 190%; }
+        .content-area { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 40px; }
+        .parking-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1000px; width: 190%; margin: auto; marging-left: auto; margin-right: auto; }
+        .parking-card { background: #6d81a9; padding: 20px; border-radius: 14px; border: 1px solid #7197e4; cursor: pointer; transition: 0.2s; width: 100%; }
+        input[name="username"], input[name="vehicleNumber"], select[name="vehicleType"], select[name="vehicleModel"], select { color: #000; }
+        label { color: #000; font-size: 14px; font-weight: 700; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .error-msg { color: #ef4444; font-size: 12px; }
+        input, select { padding: 14px 20px; border-radius: 30px; border: 1.5px solid #6c94c9; background-color: #ffffff; color: #000; }
         .parking-card.active { border: 4px solid #7c94e6; }
         .parking-card.disabled { background: #fee2e2; cursor: not-allowed; }
-
-        .form-card {
-          background: white;
-          max-width: auto;
-          width: 160%;
-          padding: 50px;
-          border-radius: 20px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
+        .form-card { background: white; max-width: auto; width: 160%; padding: 50px; border-radius: 20px; margin-left: auto; margin-right: auto; }
         .row { display: flex; gap: 20px; margin-bottom: 25px; }
         .field-group { flex: 1; display: flex; flex-direction: column; }
-
-        label {
-          font-size: 14px;
-          font-weight: 700;
-          margin-bottom: 8px;
-          display: flex;
-          justify-content: space-between;
-        }
-
-        .error-msg {
-          color: #ef4444;
-          font-size: 12px;
-        }
-
-        input, select {
-          padding: 14px 20px;
-          border-radius: 30px;
-          border: 1.5px solid #6c94c9;
-        }
-
-        .confirm-btn {
-          width: 100%;
-          padding: 16px;
-          background: #072387;
-          color: white;
-          border-radius: 12px;
-          font-weight: 700;
-          border: none;
-          cursor: pointer;
-        }
-          .confirm-btn:hover {
-          background: #4f6ef7;
-        }
-                /* Make input & select boxes WHITE */
-      input,
-      select {
-        background-color: #ffffff;
-        color: #000;
-      }
-
-      /* Fix autofill / browser styling (Chrome especially) */
-      input:-webkit-autofill,
-      input:-webkit-autofill:hover,
-      input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
-        -webkit-text-fill-color: #000;
-      }
-                
+        .confirm-btn { width: 100%; padding: 16px; background: #072387; color: white; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; }
+        .confirm-btn:hover { background: #4f6ef7; }
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0 1000px #ffffff inset; -webkit-text-fill-color: #000; }
       `}</style>
     </>
   );

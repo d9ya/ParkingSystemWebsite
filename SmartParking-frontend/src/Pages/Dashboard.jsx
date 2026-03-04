@@ -15,16 +15,16 @@ export default function Dashboard() {
       setUsername(storedUsername);
     }
     }, []);
-    useEffect(() => {
-    fetch("http://localhost:5000/api/parking/available")
-      .then(res => res.json())
-      .then(data => {
-        setAvailableSlots(data.availableSlots);
-      })
-      .catch(err => {
-        console.error("Failed to fetch parking slots", err);
-      });
-  }, []);
+// Dashboard.jsx
+useEffect(() => {
+  fetch('http://localhost:5000/api/parking/available')
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+      return res.json();
+    })
+    .then(data => setParkingSlots(data))
+    .catch(err => console.error("Failed to fetch parking slots", err));
+}, []);
 
     const handleFindParking = () => {
   fetch("http://localhost:5000/api/parking/available-spaces")
