@@ -64,20 +64,18 @@ const BookingPage = () => {
 });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Booking failed");
+if (!res.ok) throw new Error(data.message || "Booking failed");
 
-      alert("Booking Confirmed ✅");
-      setBookingSaved(true);
-      console.log("Booking saved:", data.booking);
+alert("Booking Confirmed ");
+setBookingSaved(true);
+console.log("Booking saved:", data.booking);
 
-      navigate("/payment", {
-        state: {
-          ...formData,
-          province,
-          district,
-          parkingSpot: selectedSpot.name,
-        },
-      });
+// <<< CHANGE HERE >>>
+navigate("/payment", {
+  state: {
+    booking: data // ← send the actual booking object returned from backend
+  }
+});
     } catch (err) {
       alert(err.message);
       console.error(err);

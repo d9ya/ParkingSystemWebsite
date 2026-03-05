@@ -4,7 +4,7 @@ const Booking = require("../models/Booking");
 const createBooking = async (req, res) => {
   try {
     const booking = await Booking.create(req.body);
-    res.status(201).json({ success: true, booking });
+    res.status(201).json( booking );
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server Error" });
