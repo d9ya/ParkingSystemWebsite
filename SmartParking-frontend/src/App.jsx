@@ -6,6 +6,7 @@ import PaymentPage from"./Pages/Payments.jsx";
 import HistoryPage from "./Pages/History.jsx";
 import Settings from "./Pages/Settings.jsx";
 import AdminDashboard from "./Pages/Admindashboard.jsx";
+import Homepage from "./Pages/Homepage.jsx";
 
 function App() {
   
@@ -21,6 +22,7 @@ function App() {
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/homepage" element={<Homepage />} />
         
       </Routes>
       </Router>
