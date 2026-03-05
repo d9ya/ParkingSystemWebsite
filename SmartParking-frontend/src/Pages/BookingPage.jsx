@@ -47,35 +47,39 @@ const BookingPage = () => {
       !formData.vehicleNumber ||
       !province ||
       !district ||
-      !selectedSpot
-    )
+      !selectedSpot ||
+      !formData.vehicleType ||
+      !formData.vehicleModel
+    ) {
       return;
+    }
 
     try {
-     const res = await fetch("http://localhost:5000/api/bookings/create", { 
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    ...formData,
-    province,
-    district,
-    parkingSpot: selectedSpot.name,
-  }),
-});
+      const res = await fetch("http://localhost:5000/api/bookings/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          province,
+          district,
+          parkingSpot: selectedSpot.name,
+        }),
+      });
 
       const data = await res.json();
-if (!res.ok) throw new Error(data.message || "Booking failed");
 
-alert("Booking Confirmed ");
-setBookingSaved(true);
-console.log("Booking saved:", data.booking);
+      if (!res.ok) throw new Error(data.message || "Booking failed");
 
-// <<< CHANGE HERE >>>
-navigate("/payment", {
-  state: {
-    booking: data // ← send the actual booking object returned from backend
-  }
-});
+      alert("Booking Confirmed");
+      setBookingSaved(true);
+      console.log("Booking saved:", data.booking || data);
+
+      // Navigate and pass booking data (either data.booking or data)
+      navigate("/payment", {
+        state: {
+          booking: data.booking || data,
+        },
+      });
     } catch (err) {
       alert(err.message);
       console.error(err);
@@ -84,7 +88,6 @@ navigate("/payment", {
 
   const resetAllData = () => {
     setSelectedSpot(null);
-
     setFormData({
       username: "",
       nic: "",
@@ -92,7 +95,6 @@ navigate("/payment", {
       vehicleModel: "",
       vehicleNumber: "",
     });
-
     setProvince("");
     setDistrict("");
     setSubmitted(false);
@@ -116,7 +118,6 @@ navigate("/payment", {
               onClick={() => {
                 if (spot.available === 0) return;
                 setSelectedSpot(spot);
-                
               }}
             >
               <h3>{spot.name}</h3>
@@ -161,26 +162,38 @@ navigate("/payment", {
 
                 <div className="row">
                   <div className="field-group">
-                    <label>Vehicle Type</label>
+                    <label>
+                      Vehicle Type
+                      {submitted && !formData.vehicleType && (
+                        <span className="error-msg">Select vehicle type</span>
+                      )}
+                    </label>
                     <select
                       name="vehicleType"
                       value={formData.vehicleType}
                       onChange={handleChange}
                     >
-                      <option>Car</option>
-                      <option>Bike</option>
+                      <option value="">Select Vehicle Type</option>
+                      <option value="Car">Car</option>
+                      <option value="Bike">Bike</option>
                     </select>
                   </div>
 
                   <div className="field-group">
-                    <label>Vehicle Model</label>
+                    <label>
+                      Vehicle Model
+                      {submitted && !formData.vehicleModel && (
+                        <span className="error-msg">Select vehicle model</span>
+                      )}
+                    </label>
                     <select
                       name="vehicleModel"
                       value={formData.vehicleModel}
                       onChange={handleChange}
                     >
-                      <option>Model A</option>
-                      <option>Model B</option>
+                      <option value="">Select Vehicle Model</option>
+                      <option value="Model A">Model A</option>
+                      <option value="Model B">Model B</option>
                     </select>
                   </div>
                 </div>
@@ -201,7 +214,12 @@ navigate("/payment", {
 
                 <div className="row">
                   <div className="field-group">
-                    <label>Province</label>
+                    <label>
+                      Province
+                      {submitted && !province && (
+                        <span className="error-msg">Select province</span>
+                      )}
+                    </label>
                     <select
                       value={province}
                       onChange={(e) => {
@@ -209,30 +227,41 @@ navigate("/payment", {
                         setDistrict("");
                       }}
                     >
-                      <option></option>
+                      <option value="">Select Province</option>
                       {provinces.map((p) => (
-                        <option key={p}>{p}</option>
+                        <option key={p} value={p}>
+                          {p}
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="field-group">
-                    <label>District</label>
+                    <label>
+                      District
+                      {submitted && !district && (
+                        <span className="error-msg">Select district</span>
+                      )}
+                    </label>
                     <select
                       value={district}
                       onChange={(e) => setDistrict(e.target.value)}
                       disabled={!province}
                     >
-                      <option></option>
+                      <option value="">Select District</option>
                       {province &&
                         districts[province].map((d) => (
-                          <option key={d}>{d}</option>
+                          <option key={d} value={d}>
+                            {d}
+                          </option>
                         ))}
                     </select>
                   </div>
                 </div>
 
-                <button className="confirm-btn">Confirm</button>
+                <button className="confirm-btn" type="submit">
+                  Confirm
+                </button>
 
                 {bookingSaved && (
                   <p
@@ -252,7 +281,7 @@ navigate("/payment", {
         )}
       </div>
 
-      {/* CSS remains unchanged */}
+      {/* CSS unchanged */}
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #f9fbff; font-family: Helvetica, Arial, sans-serif; overflow-x: hidden; }
